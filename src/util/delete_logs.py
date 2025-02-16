@@ -14,5 +14,5 @@ def delete_logs_directories(root_dir):
 
 
 if __name__ == "__main__":
-    project_root = '.'
+    project_root = '../../'
     delete_logs_directories(project_root)
