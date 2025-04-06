@@ -1,8 +1,9 @@
 import json
 from time import sleep
 
-from src.config.constants import HAS_BLUES, MAJOR_SCALE_ONLY
+from src.config.constants import HAS_BLUES, MAJOR_SCALE_ONLY, NUM_FRETS
 from src.model.input import Input
+from src.model.key import Key
 from src.model.mode import Mode
 from src.model.session import Session, Component
 from src.service.app_logger import AppLogger
@@ -193,7 +194,8 @@ def print_error(session: Session, message: str):
     print_line_centered_x('Error', component.get_start_y() + 1, component.get_start_x(), component.get_end_x(), session)
     print_line_centered_x('-' * (w - 1), component.get_start_y() + 2, component.get_start_x(), component.get_end_x(),
                           session)
-    print_line_centered_x(f'{message}', component.get_start_y() + 5, component.get_start_x(), component.get_end_x(), session)
+    print_line_centered_x(f'{message}', component.get_start_y() + 5, component.get_start_x(), component.get_end_x(),
+                          session)
     print_line_left_x('Press any key to continue...', component.get_end_y() - 1, component.get_start_x(), session)
     session.get_writer().getch()
 
@@ -282,11 +284,8 @@ def print_home_graphic(component: Component, session: Session):
     print_line_centered_x(f'Welcome to MSMA', start_y + 1, start_x, end_x, session)
     print_line_centered_x(f'Press any key to get started...', start_y + 3, start_x, end_x, session)
     key = get_random_key()
-    fretboard = get_fretboard(key, False, False)
     base = start_y + 7
-    for string in fretboard:
-        print_line_centered_x(string, base, start_x, end_x, session)
-        base += 1
+    print_fretboard(start_x, end_x, base, session, key)
 
 
 def print_key(component: Component, session: Session):
@@ -329,9 +328,87 @@ def print_key(component: Component, session: Session):
 
     fretboard = get_fretboard(key, session.is_pentatonic(), session.is_blues())
     base = start_y + 18
+    print_fretboard(start_x, end_x, base, session)
+
+
+def print_fretboard(start_x, end_x, start_y, session: Session, key: Key = None):
+    logger.info("Printing fretboard")
+    key = key if key else session.get_key()
+    fretboard = get_fretboard(key, False, False)
+    root = key.get_root()
+    open_strings = ["E", "A", "D", "G", "B", "E"]
+    strings = []
+    i = 0
     for string in fretboard:
-        print_line_centered_x(string, base, start_x, end_x, session)
-        base += 1
+        string_str = f'{open_strings[i]} |'
+        j = 0
+        for note in string:
+            if j < 4:
+                prefix = '|----' if note != root else '|---*'
+                suffix = '---' if note and len(note) == 2 else '----'
+            elif 4 <= j < 12:
+                prefix = '|---' if note != root else '|--*'
+                suffix = '--' if note and len(note) == 2 else '---'
+            elif 12 <= j < 17:
+                prefix = '|--' if note != root else '|-*'
+                suffix = '-' if note and len(note) == 2 else '--'
+            else:
+                prefix = '|-' if note != root else '|*'
+                suffix = '' if note and len(note) == 2 else '-'
+            string_str += f'{prefix}{note if note else "-"}{suffix}'
+            j = j + 1
+        string_str += '|'
+        strings.append(string_str)
+        i = i + 1
+
+    # Print to the screen
+    for string in strings:
+        print_line_centered_x(string, start_y, start_x, end_x, session)
+        start_y += 1
+
+    # Frets that traditionally have markers
+    marker_frets = {3, 5, 7, 9, 12, 15, 17, 19, 21}
+    double_marker_fret = 12
+
+    # Start with the open string spacing
+    marker_line = '  '  # Space to align with string labels
+    # This needs to match your fret spacing logic
+    for j in range(len(fretboard[0])):  # Assuming all strings same length
+        marker = ' ' if j not in marker_frets else ':' if j == double_marker_fret else '.'
+        if j < 4:
+            st = f"     {marker}    "
+        elif 4 <= j < 12:
+            st = f"    {marker}   "
+        elif 12 <= j < 17:
+            st = f"   {marker}  "
+        else:
+            st = f"  {marker} "
+
+        marker_line += st
+
+    # marker_line += ' '
+
+    logger.info(f"MARKER LINE: {marker_line}")
+
+    # Draw the marker line above fretboard
+    print_line_centered_x(marker_line, start_y, start_x, end_x, session)
+    start_y += 2  # move down before drawing the fretboard
+
+
+def _get_fret_number_str() -> str:
+    """
+    Retrieves the fret number string.
+    :return:
+    """
+    fret_str = '    '
+    prefix = '    '
+    for i in range(1, NUM_FRETS + 1):
+        if i < 10:
+            fret_str += f'{prefix}{i}   '
+        else:
+            fret_str += f'{prefix}{i}  '
+    fret_str += ' '
+    return fret_str
 
 
 # Main app functions ###########################################

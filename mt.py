@@ -12,12 +12,52 @@ from src.ui.curses_ui import refresh_screen, print_help, toggle_relative, print_
 logger = AppLogger.get_logger()
 
 
+def setup_light_mode_colors():
+    curses.start_color()
+    curses.use_default_colors()
+
+    # Define custom colors (index, R, G, B in 0-1000 range)
+    curses.init_color(10, 950, 930, 850)  # Soft warm beige
+    curses.init_color(11, 133, 133, 133)  # Dark Charcoal text
+    curses.init_color(12, 333, 333, 333)  # Muted Gray
+    curses.init_color(13, 184, 502, 929)  # Accent Blue
+    curses.init_color(14, 866, 866, 866)  # Light Gray
+    curses.init_color(15, 827, 184, 184)  # Error Red
+    curses.init_color(16, 219, 557, 235)  # Success Green
+    curses.init_color(17, 1000, 980, 803)  # Pale Yellow
+
+    # Define color pairs (pair number, foreground, background)
+    curses.init_pair(1, 11, 10)  # Primary Text on Background
+    curses.init_pair(2, 12, 10)  # Secondary Text
+    curses.init_pair(3, 13, 10)  # Accent
+    curses.init_pair(4, 15, 10)  # Error
+    curses.init_pair(5, 16, 10)  # Success
+    curses.init_pair(6, 11, 14)  # Border / lines
+    curses.init_pair(7, 11, 17)  # Prompt Input Box
+
+
+def setup_dark_mode_colors():
+    # Initialize dark colors
+    curses.init_color(10, 100, 100, 100)  # Dark grey background
+    curses.init_color(11, 900, 900, 900)  # Soft white text
+    curses.init_color(12, 400, 600, 900)  # Slate blue accent (e.g., headings, links)
+    curses.init_color(13, 400, 700, 500)  # Muted green (success)
+    curses.init_color(14, 900, 400, 400)  # Muted red (error)
+    curses.init_color(15, 900, 800, 500)  # Muted yellow (warning)
+
+    # Initialize color pairs
+    curses.init_pair(1, 11, 10)  # White text on dark grey background
+    curses.init_pair(2, 12, 10)  # Slate blue on dark grey
+    curses.init_pair(3, 13, 10)  # Green on dark grey
+    curses.init_pair(4, 14, 10)  # Red on dark grey
+    curses.init_pair(5, 15, 10)  # Yellow on dark grey
+
+
 # Main function ###############################################
 def main(stdscr):
     logger.debug('Starting app...')
     # Define color pairs (foreground, background)
-    curses.init_color(10, 0, 51, 0)
-    curses.init_pair(1, curses.COLOR_WHITE, 10)
+    setup_dark_mode_colors()
     # Set the background color
     stdscr.bkgd(' ', curses.color_pair(1))
     curses.curs_set(0)  # Hide the cursor

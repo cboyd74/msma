@@ -59,7 +59,7 @@ def get_fretboard(key: Key, is_pent: bool = False, is_blues: bool = False) -> [[
     :param key:
     :return:
     """
-    fretboard = [_get_fret_number_str()]
+    fretboard = []
     for note in STANDARD_TUNING:
         fretboard.append(_get_guitar_string_for_frontend(note, key, is_pent, is_blues))
     logger.debug(f'Getting fretboard: {fretboard}')
@@ -245,16 +245,7 @@ def _get_guitar_string_for_frontend(open_string: str, key: Key, is_pent: bool = 
             string[i] = new_note
         else:
             string[i] = None
-    string_str = f'{open_string} |'
-    for note in string:
-        prefix = '|---' if note != root else '|--*'
-        if note and len(note) == 2:
-            string_str += f'{prefix}{note}--'
-        else:
-            string_str += f'{prefix}{note if note else "-"}---'
-
-    string_str += '|'
-    return string_str
+    return string
 
 
 def _get_fret_number_str() -> str:
