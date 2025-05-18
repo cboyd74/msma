@@ -7,8 +7,6 @@ MSMA is a terminal-based music application that allows users to explore differen
 - Display musical keys and their relative keys
 - Toggle between major and minor scales
 - Toggle pentatonic and blues scales
-- Interactive help and error messages
-- Customizable terminal interface with color support
 
 ## Installation
 
@@ -21,12 +19,12 @@ MSMA is a terminal-based music application that allows users to explore differen
 2. Create a virtual environment and activate it:
     ```sh
     python3 -m venv msma_env
-    source venv/bin/activate
+    source msma_env/bin/activate
     ```
 
 3. Install the required dependencies:
     ```sh
-    pip install coverage
+   pip install -r requirements.txt
     ```
 
 ## Usage
