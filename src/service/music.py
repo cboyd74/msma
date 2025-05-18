@@ -1,5 +1,5 @@
 from src.service.app_logger import AppLogger
-from src.config.constants import SHARP_SCALE, STEP_VALUES, STEP_DEFINITIONS, ENHARMONIC_FIXES, CHORD_PATTERNS, NUM_FRETS
+from src.config.constants import SHARP_SCALE, STEP_VALUES, STEP_DEFINITIONS, CHORD_PATTERNS, NUM_FRETS
 from src.model.mode import Mode
 
 logger = AppLogger.get_logger()
@@ -39,12 +39,6 @@ def get_notes(mode: Mode, root: str) -> [str]:
         chromatic_idx = get_next_idx(chromatic_idx, step)
         note = SHARP_SCALE[chromatic_idx]
         scale.append(note)
-    if root in ENHARMONIC_FIXES.keys():
-        for note in ENHARMONIC_FIXES.get(root):
-            if note in scale:
-                i = scale.index(note)
-                note_fixed = ENHARMONIC_FIXES.get(root).get(note)
-                scale[i] = note_fixed
     return scale
 
 

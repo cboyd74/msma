@@ -35,11 +35,6 @@ MINOR_RELATIVES = {
 }
 
 SHARP_TO_FLAT = {'C#': 'Db', 'D#': 'Eb', 'F#': 'Gb', 'G#': 'Ab', 'A#': 'Bb', 'B#': 'Cb'}
-ENHARMONIC_FIXES = {
-    "C#": {"F": "E#"},
-    "D#": {"C": "B#", "F": "E#", "G": "F#"},
-    "F#": {"F": "E#"}
-}
 
 normal_fixes = {
     "E#": "F",

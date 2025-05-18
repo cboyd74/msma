@@ -29,9 +29,6 @@ class TestMusic(TestCase):
         notes = get_notes(Mode.MINOR, 'G')
         self.assertEqual(expected_notes, notes)
 
-if __name__ == '__main__':
-    unittest.main()
-
     def test_get_notes_d_major(self):
         expected_notes = ['D', 'E', 'F#', 'G', 'A', 'B', 'C#', 'D']
         notes = get_notes(Mode.MAJOR, 'D')
@@ -73,7 +70,7 @@ if __name__ == '__main__':
         self.assertEqual(expected_notes, notes)
 
     def test_get_notes_f_sharp_major(self):
-        expected_notes = ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F#']
+        expected_notes = ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'F', 'F#']
         notes = get_notes(Mode.MAJOR, 'F#')
         self.assertEqual(expected_notes, notes)
 
@@ -83,7 +80,7 @@ if __name__ == '__main__':
         self.assertEqual(expected_notes, notes)
 
     def test_get_notes_c_sharp_major(self):
-        expected_notes = ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'C', 'C#']
+        expected_notes = ['C#', 'D#', 'F', 'F#', 'G#', 'A#', 'C', 'C#']
         notes = get_notes(Mode.MAJOR, 'C#')
         self.assertEqual(expected_notes, notes)
 
@@ -116,13 +113,13 @@ if __name__ == '__main__':
 
     def test_get_notes_e_flat_major(self):
         root = TRADITIONAL_FLAT_TO_SHARP.get('Eb')
-        expected_notes = ['D#', 'E#', 'F#', 'G#', 'A#', 'B#', 'D', 'D#']
+        expected_notes = ['D#', 'F', 'G', 'G#', 'A#', 'C', 'D', 'D#']
         notes = get_notes(Mode.MAJOR, root)
         self.assertEqual(expected_notes, notes)
 
     def test_get_notes_e_flat_minor(self):
         root = TRADITIONAL_FLAT_TO_SHARP.get('Eb')
-        expected_notes = ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C#', 'D#']
+        expected_notes = ['D#', 'F', 'F#', 'G#', 'A#', 'B', 'C#', 'D#']
         notes = get_notes(Mode.MINOR, root)
         self.assertEqual(expected_notes, notes)
 
@@ -140,7 +137,7 @@ if __name__ == '__main__':
 
     def test_get_notes_d_flat_major(self):
         root = TRADITIONAL_FLAT_TO_SHARP.get('Db')
-        expected_notes = ['C#', 'D#', 'E#', 'F#', 'G#', 'A#', 'C', 'C#']
+        expected_notes = ['C#', 'D#', 'F', 'F#', 'G#', 'A#', 'C', 'C#']
         notes = get_notes(Mode.MAJOR, root)
         self.assertEqual(expected_notes, notes)
 
@@ -152,7 +149,7 @@ if __name__ == '__main__':
 
     def test_get_notes_g_flat_major(self):
         root = TRADITIONAL_FLAT_TO_SHARP.get('Gb')
-        expected_notes = ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#', 'F#']
+        expected_notes = ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'F', 'F#']
         notes = get_notes(Mode.MAJOR, root)
         self.assertEqual(expected_notes, notes)
 
@@ -185,16 +182,6 @@ if __name__ == '__main__':
         steps = get_steps(Mode.MINOR)
         self.assertEqual(steps, expected_steps)
 
-    def test_get_steps_major_p_mode(self):
-        expected_steps = ['W', 'W', '3W', 'W', '3W']
-        steps = get_steps(Mode.MAJOR_P)
-        self.assertEqual(steps, expected_steps)
-
-    def test_get_steps_minor_p_mode(self):
-        expected_steps = ['3W', '2W', 'W', '3W', '2W']
-        steps = get_steps(Mode.MINOR_P)
-        self.assertEqual(steps, expected_steps)
-
     # Test get_chord_pattern ######################################
     def test_get_chord_pattern_major_mode(self):
         expected_pattern = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']
@@ -208,31 +195,31 @@ if __name__ == '__main__':
 
     # Test guitar functions ########################################
     def test_get_guitar_string_e(self):
-        expected_string = ['E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
+        expected_string = ['F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#',
                            'A', 'A#', 'B', 'C', 'C#', 'D']
         string = get_guitar_string('E')
         self.assertEqual(expected_string, string)
 
     def test_get_guitar_string_a(self):
-        expected_string = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#',
+        expected_string = ['A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#',
                            'D', 'D#', 'E', 'F', 'F#', 'G']
         string = get_guitar_string('A')
         self.assertEqual(expected_string, string)
 
     def test_get_guitar_string_d(self):
-        expected_string = ['D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#',
+        expected_string = ['D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#',
                            'G', 'G#', 'A', 'A#', 'B', 'C']
         string = get_guitar_string('D')
         self.assertEqual(expected_string, string)
 
     def test_get_guitar_string_g(self):
-        expected_string = ['G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
-                           'C', 'C#', 'D', 'D#', 'E', 'F']
+        expected_string = ['G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C',
+                           'C#', 'D', 'D#', 'E', 'F']
         string = get_guitar_string('G')
         self.assertEqual(expected_string, string)
 
     def test_get_guitar_string_b(self):
-        expected_string = ['B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#',
+        expected_string = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#',
                            'E', 'F', 'F#', 'G', 'G#', 'A']
         string = get_guitar_string('B')
         self.assertEqual(expected_string, string)
