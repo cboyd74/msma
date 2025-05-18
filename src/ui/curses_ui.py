@@ -334,7 +334,7 @@ def print_key(component: Component, session: Session):
 def print_fretboard(start_x, end_x, start_y, session: Session, key: Key = None):
     logger.info("Printing fretboard")
     key = key if key else session.get_key()
-    fretboard = get_fretboard(key, False, False)
+    fretboard = get_fretboard(key, session.is_pentatonic(), session.is_blues())
     root = key.get_root()
     open_strings = ["E", "A", "D", "G", "B", "E"]
     strings = []
@@ -343,13 +343,13 @@ def print_fretboard(start_x, end_x, start_y, session: Session, key: Key = None):
         string_str = f'{open_strings[i]} |'
         j = 0
         for note in string:
-            if j < 4:
+            if j < 3:
                 prefix = '|----' if note != root else '|---*'
                 suffix = '---' if note and len(note) == 2 else '----'
-            elif 4 <= j < 12:
+            elif 3 <= j < 11:
                 prefix = '|---' if note != root else '|--*'
                 suffix = '--' if note and len(note) == 2 else '---'
-            elif 12 <= j < 17:
+            elif 11 <= j < 16:
                 prefix = '|--' if note != root else '|-*'
                 suffix = '-' if note and len(note) == 2 else '--'
             else:
@@ -366,20 +366,20 @@ def print_fretboard(start_x, end_x, start_y, session: Session, key: Key = None):
         print_line_centered_x(string, start_y, start_x, end_x, session)
         start_y += 1
 
-    # Frets that traditionally have markers
-    marker_frets = {3, 5, 7, 9, 12, 15, 17, 19, 21}
-    double_marker_fret = 12
+    # Frets that traditionally have markers (0 indexed)
+    marker_frets = {2, 4, 6, 8, 11, 14, 16, 18, 20}
+    double_marker_fret = 11
 
     # Start with the open string spacing
     marker_line = '  '  # Space to align with string labels
     # This needs to match your fret spacing logic
     for j in range(len(fretboard[0])):  # Assuming all strings same length
         marker = ' ' if j not in marker_frets else ':' if j == double_marker_fret else '.'
-        if j < 4:
+        if j < 3:
             st = f"     {marker}    "
-        elif 4 <= j < 12:
+        elif 3 <= j < 11:
             st = f"    {marker}   "
-        elif 12 <= j < 17:
+        elif 11 <= j < 16:
             st = f"   {marker}  "
         else:
             st = f"  {marker} "
